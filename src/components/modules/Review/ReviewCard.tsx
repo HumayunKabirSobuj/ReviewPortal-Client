@@ -236,7 +236,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
                   className="w-full text-xs hover:bg-primary/10 transition-colors"
                   onClick={handleUnlockClick}
                 >
-                  Unlock for BDT{review?.Discount?.newPrice?.toFixed(2) || "0000"}{" "}
+                  Unlock for BDT{review?.price || "0000"}{" "}
                   {review?.Discount && (
                     <div>
                       <Badge variant="outline">{review.Discount.percent} % Off</Badge>
