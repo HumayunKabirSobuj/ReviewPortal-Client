@@ -43,6 +43,14 @@ interface Review {
   excerp?: string;
   Payment?: any[];
   imageUrls?: string[];
+  Discount?: {
+    id: string;
+    percent: number;
+    newPrice: number;
+    reviewId: string;
+    createdAt: string; // ISO date string
+    updatedAt: string; // ISO date string
+  };
 }
 
 interface ReviewCardProps {
@@ -51,6 +59,7 @@ interface ReviewCardProps {
 
 // Optimized Review Card component with entire card clickable
 const ReviewCard = memo(({ review }: ReviewCardProps) => {
+  // console.log(review);
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -141,7 +150,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
               "w-4 h-4",
               i < review.rating
                 ? "text-yellow-500 fill-yellow-500"
-                : "text-gray-300 fill-gray-300",
+                : "text-gray-300 fill-gray-300"
             )}
           />
         ))}
@@ -157,7 +166,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
       <Card
         className={cn(
           "h-full flex flex-col max-w-md transition-all duration-200 cursor-pointer",
-          isHovered ? "shadow-md translate-y-[-2px]" : "hover:shadow-sm",
+          isHovered ? "shadow-md translate-y-[-2px]" : "hover:shadow-sm"
         )}
         onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -169,7 +178,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
               <h3
                 className={cn(
                   "font-semibold text-lg line-clamp-2 transition-colors",
-                  isHovered ? "text-primary" : "",
+                  isHovered ? "text-primary" : ""
                 )}
               >
                 {review.title}
@@ -227,7 +236,12 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
                   className="w-full text-xs hover:bg-primary/10 transition-colors"
                   onClick={handleUnlockClick}
                 >
-                  Unlock for BDT{review.price?.toFixed(2) || "0000"}
+                  Unlock for BDT{review?.Discount?.newPrice?.toFixed(2) || "0000"}{" "}
+                  {review?.Discount && (
+                    <div>
+                      <Badge variant="outline">{review.Discount.percent} % Off</Badge>
+                    </div>
+                  )}
                 </Button>
               </div>
             )}
@@ -337,6 +351,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
         excerpt={excerpt}
         price={review.price || 2.99}
         author={review.author.name}
+        review={review}
       />
     </>
   );

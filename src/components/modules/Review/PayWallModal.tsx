@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
@@ -17,6 +18,38 @@ import { Badge } from "@/components/ui/badge";
 import { Lock } from "lucide-react";
 import { makePayment } from "@/services/Payments";
 import { toast } from "sonner";
+interface Review {
+  id: string;
+  title: string;
+  description: string;
+  rating: number;
+  categoryId: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  author: {
+    id: string;
+    name: string;
+  };
+  isPremium: boolean;
+  userId: string;
+  price?: number;
+  votes?: string[];
+  comments?: string[];
+  createdAt: string;
+  excerp?: string;
+  Payment?: any[];
+  imageUrls?: string[];
+  Discount?: {
+    id: string;
+    percent: number;
+    newPrice: number;
+    reviewId: string;
+    createdAt: string; // ISO date string
+    updatedAt: string; // ISO date string
+  };
+}
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -26,6 +59,7 @@ interface PaywallModalProps {
   excerpt: string;
   price: number;
   author: string;
+  review?: Review;
 }
 
 export default function PaywallModal({
@@ -36,6 +70,7 @@ export default function PaywallModal({
   excerpt,
   price,
   author,
+  review,
 }: PaywallModalProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -81,7 +116,15 @@ export default function PaywallModal({
               Premium Content
             </Badge>
             <Badge variant="outline" className="text-muted-foreground">
-              {price.toFixed(2)} BDT
+                {review?.Discount ? (
+              <div>
+                {review.Discount.newPrice.toFixed(2)}
+              </div>
+            ) : (
+              <div>
+                {price.toFixed(2)}
+              </div>
+            )} BDT
             </Badge>
           </div>
           <DialogTitle className="text-xl mt-2">{title}</DialogTitle>
@@ -123,7 +166,20 @@ export default function PaywallModal({
             className="sm:flex-1 bg-primary hover:bg-primary/90 text-white"
             disabled={isLoading}
           >
-            {isLoading ? "Processing..." : `Pay ${price.toFixed(2)} BDT Now`}
+            {/* {isLoading ? "Processing..." : `Pay ${price.toFixed(2)}  BDT Now`} */}
+            {review?.Discount ? (
+              <div>
+                 {isLoading
+                    ? "Processing..."
+                    : `Pay ${review.Discount.newPrice.toFixed(2)}  BDT Now`}
+              </div>
+            ) : (
+              <div>
+                {isLoading
+                  ? "Processing..."
+                  : `Pay ${price.toFixed(2)}  BDT Now`}
+              </div>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
