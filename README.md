@@ -73,7 +73,7 @@ https://review-portal-b4-02.vercel.app
 
 1. Clone the repository:
 
-` git clone https://github.com/HumayunKabirSobuj/ReviewHub-Client.git`
+` git clone https://github.com/HumayunKabirSobuj/ReviewPortal-Client.git`
 
 2. cd ReviewHub-Client
 
